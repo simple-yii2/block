@@ -44,6 +44,11 @@ class BlockForm extends Model
 	public $url;
 
 	/**
+	 * @var string Link label
+	 */
+	public $linkLabel;
+
+	/**
 	 * @var ActiveRecord Assigned object.
 	 */
 	public $object;
@@ -59,7 +64,7 @@ class BlockForm extends Model
 		$this->active = true;
 
 		if (($object = $this->object) !== null) {
-			$this->setAttributes($object->getAttributes(['active', 'image', 'thumb', 'title', 'text', 'url']), false);
+			$this->setAttributes($object->getAttributes(['active', 'image', 'thumb', 'title', 'text', 'url', 'linkLabel']), false);
 
 			Yii::$app->storage->cacheObject($object);
 		}
@@ -76,6 +81,7 @@ class BlockForm extends Model
 			'title' => Yii::t('blocks', 'Title'),
 			'text' => Yii::t('blocks', 'Text'),
 			'url' => Yii::t('blocks', 'Url'),
+			'linkLabel' => Yii::t('blocks', 'Link label'),
 		];
 	}
 
@@ -86,9 +92,10 @@ class BlockForm extends Model
 	{
 		return [
 			['active', 'boolean'],
-			[['image', 'thumb', 'text', 'url'], 'string', 'max' => 200],
-			[['title'], 'string', 'max' => 100],
-			['title', 'required'],
+			[['image', 'thumb', 'url'], 'string', 'max' => 200],
+			['text', 'string', 'max' => 500],
+			[['title', 'linkLabel'], 'string', 'max' => 100],
+			[['title', 'url'], 'required'],
 			['url', 'url'],
 		];
 	}
@@ -111,6 +118,7 @@ class BlockForm extends Model
 			'title' => $this->title,
 			'text' => $this->text,
 			'url' => $this->url,
+			'linkLabel' => $this->linkLabel,
 		]);
 
 		Yii::$app->storage->storeObject($object);
@@ -141,6 +149,7 @@ class BlockForm extends Model
 			'title' => $this->title,
 			'text' => $this->text,
 			'url' => $this->url,
+			'linkLabel' => $this->linkLabel,
 		], false);
 
 		Yii::$app->storage->storeObject($object);

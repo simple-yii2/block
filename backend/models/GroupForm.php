@@ -24,6 +24,16 @@ class GroupForm extends Model
 	public $title;
 
 	/**
+	 * @var integer Block image width
+	 */
+	public $imageWidth;
+
+	/**
+	 * @var integer Block image height
+	 */
+	public $imageHeight;
+
+	/**
 	 * @var ActiveRecord Assigned object.
 	 */
 	public $object;
@@ -35,8 +45,11 @@ class GroupForm extends Model
 	{
 		parent::init();
 
+		$this->imageWidth = 100;
+		$this->imageHeight = 100;
+
 		if (($object = $this->object) !== null) {
-			$this->setAttributes($object->getAttributes(['alias', 'title']), false);
+			$this->setAttributes($object->getAttributes(['alias', 'title', 'imageWidth', 'imageHeight']), false);
 		}
 	}
 
@@ -48,6 +61,8 @@ class GroupForm extends Model
 		return [
 			'alias' => Yii::t('blocks', 'Alias'),
 			'title' => Yii::t('blocks', 'Title'),
+			'imageWidth' => Yii::t('blocks', 'Image width'),
+			'imageHeight' => Yii::t('blocks', 'Image height'),
 		];
 	}
 
@@ -58,7 +73,8 @@ class GroupForm extends Model
 	{
 		return [
 			[['alias', 'title'], 'string', 'max' => 100],
-			[['alias', 'title'], 'required'],
+			[['imageWidth', 'imageHeight'], 'integer', 'min' => 32, 'max' => 1000],
+			[['alias', 'title', 'imageWidth', 'imageHeight'], 'required'],
 		];
 	}
 
@@ -74,6 +90,8 @@ class GroupForm extends Model
 		$this->object = $object = new Group([
 			'alias' => $this->alias,
 			'title' => $this->title,
+			'imageWidth' => $this->imageWidth,
+			'imageHeight' => $this->imageHeight,
 		]);
 
 		if (!$object->save(false))
@@ -98,6 +116,8 @@ class GroupForm extends Model
 		$object->setAttributes([
 			'alias' => $this->alias,
 			'title' => $this->title,
+			'imageWidth' => $this->imageWidth,
+			'imageHeight' => $this->imageHeight,
 		], false);
 
 		if (!$object->save(false))

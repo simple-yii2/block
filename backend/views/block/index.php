@@ -8,7 +8,7 @@ $title = $group->title;
 $this->title = $title . ' | ' . Yii::$app->name;
 
 $this->params['breadcrumbs'] = [
-	['label' => Yii::t('blocks', 'Block groups'), 'url' => ['groups/index']],
+	['label' => Yii::t('blocks', 'Block groups'), 'url' => ['group/index']],
 	$title,
 ];
 

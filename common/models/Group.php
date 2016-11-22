@@ -27,4 +27,17 @@ class Group extends ActiveRecord
 		return $this->hasMany(Block::className(), ['group_id' => 'id'])->inverseOf('group');
 	}
 
+	/**
+	 * Find by alias
+	 * @param sring $alias Alias or id
+	 * @return Group
+	 */
+	public static function findByAlias($alias) {
+		$model = static::findOne(['alias' => $alias]);
+		if ($model === null)
+			$model = static::findOne(['id' => $alias]);
+
+		return $model;
+	}
+
 }

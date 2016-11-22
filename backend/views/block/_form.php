@@ -16,6 +16,10 @@ use uploadimage\widgets\UploadImage;
 
 	<?= $form->field($model, 'image')->widget(UploadImage::className(), [
 		'thumbAttribute' => 'thumb',
+		'maxImageWidth' => 1000,
+		'maxImageHeight' => 1000,
+		'thumbWidth' => $group->imageWidth,
+		'thumbHeight' => $group->imageHeight,
 		'maxFileSize' => 2048,
 	]) ?>
 
@@ -23,7 +27,9 @@ use uploadimage\widgets\UploadImage;
 
 	<?= $form->field($model, 'text')->textarea(['rows' => 5]) ?>
 
-	<?= $form->field($model, 'url') ?>
+	<?= $form->field($model, 'url')->textInput(['placeholder' => 'http://example.com']) ?>
+
+	<?= $form->field($model, 'linkLabel') ?>
 
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">

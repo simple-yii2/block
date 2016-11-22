@@ -14,6 +14,10 @@ use yii\helpers\Html;
 
 	<?= $form->field($model, 'title') ?>
 
+	<?= $form->field($model, 'imageWidth') ?>
+
+	<?= $form->field($model, 'imageHeight') ?>
+
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">
 			<?= Html::submitButton(Yii::t('blocks', 'Save'), ['class' => 'btn btn-primary']) ?>
