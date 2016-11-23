@@ -3,7 +3,6 @@
 namespace simple\blocks\backend\controllers;
 
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
