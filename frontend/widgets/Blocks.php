@@ -62,6 +62,9 @@ class Blocks extends Widget
 			throw new InvalidConfigException('Property "alias" must be set.');
 
 		$this->model = models\Group::findByAlias($this->alias);
+
+		if (!$this->model->active)
+			$this->model = null;
 	}
 
 	/**
