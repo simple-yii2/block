@@ -100,6 +100,11 @@ class GroupController extends Controller
 		if ($object === null)
 			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
 
+		foreach ($object->blocks as $block) {
+			$block->delete();
+			Yii::$app->storage->removeObject($block);
+		}
+
 		if ($object->delete()) {
 			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Group deleted successfully.'));
 		}
