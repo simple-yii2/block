@@ -112,7 +112,7 @@ class GroupForm extends Model
 		$object->alias = $this->alias;
 		$object->title = $this->title;
 		$object->imageWidth = (integer) $this->imageWidth;
-		$object->imageWidth = (integer) $this->imageWidth;
+		$object->imageHeight = (integer) $this->imageHeight;
 
 		if (!$object->save(false))
 			return false;
