@@ -31,9 +31,9 @@ $this->params['breadcrumbs'] = [
 			'attribute' => 'title',
 			'format' => 'raw',
 			'value' => function($model, $key, $index, $column) {
-				$title = Html::encode($model->title);
-				$url = Html::a(Html::encode($model->url), $model->url, ['target' => '_blank']);
-				// $url = Html::tag('span', Html::encode($model->url), ['class' => 'text-muted']);
+				$title = Html::tag('strong', Html::encode($model->title));
+				$label = empty($model->linkLabel) ? $model->url : $model->linkLabel;
+				$url = Html::a(Html::encode($label), $model->url, ['target' => '_blank']);
 
 				return $title . '&nbsp;' . $url;
 			}
