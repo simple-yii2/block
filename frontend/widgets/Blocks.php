@@ -63,7 +63,7 @@ class Blocks extends Widget
 
 		$this->model = models\Group::findByAlias($this->alias);
 
-		if (!$this->model->active)
+		if ($this->model && !$this->model->active)
 			$this->model = null;
 	}
 
