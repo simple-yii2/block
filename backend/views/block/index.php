@@ -23,14 +23,20 @@ $this->params['breadcrumbs'] = [
 	'dataProvider' => $dataProvider,
 	'summary' => '',
 	'tableOptions' => ['class' => 'table table-condensed'],
+	'rowOptions' => function ($model, $key, $index, $grid) {
+		return !$model->active ? ['class' => 'warning'] : [];
+	},
 	'columns' => [
 		[
 			'attribute' => 'title',
-			'label' => Yii::t('blocks', 'Title'),
-			// 'format' => 'html',
-			// 'value' => function($model, $key, $index, $column) {
-			// 	return Html::img($model->thumb, ['width' => 200]);
-			// }
+			'format' => 'raw',
+			'value' => function($model, $key, $index, $column) {
+				$title = Html::encode($model->title);
+				$url = Html::a(Html::encode($model->url), $model->url, ['target' => '_blank']);
+				// $url = Html::tag('span', Html::encode($model->url), ['class' => 'text-muted']);
+
+				return $title . '&nbsp;' . $url;
+			}
 		],
 		[
 			'class' => 'yii\grid\ActionColumn',

@@ -1,10 +1,12 @@
 create table if not exists `BlockGroup`
 (
 	`id` int(10) not null auto_increment,
+	`active` tinyint(1) default 1,
 	`alias` varchar(100) default null,
 	`title` varchar(100) default null,
 	`imageWidth` int(10) not null,
 	`imageHeight` int(10) not null,
+	`blockCount` int(10) default null,
 	primary key (`id`),
 	key `alias` (`alias`)
 ) engine InnoDB;

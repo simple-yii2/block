@@ -49,25 +49,31 @@ class BlockForm extends Model
 	public $linkLabel;
 
 	/**
-	 * @var ActiveRecord Assigned object.
+	 * @var \simple\blocks\common\models\Block
 	 */
-	public $object;
+	private $_object;
 
 	/**
 	 * @inheritdoc
+	 * @param \simple\blocks\common\models\Block $object 
 	 */
-	public function init()
+	public function __construct(\simple\blocks\common\models\Block $object, $config = [])
 	{
-		parent::init();
+		$this->_object = $object;
 
-		//default
-		$this->active = true;
+		//attributes
+		$this->active = $object->active == 0 ? '0' : '1';
+		$this->image = $object->image;
+		$this->thumb = $object->thumb;
+		$this->title = $object->title;
+		$this->text = $object->text;
+		$this->url = $object->url;
+		$this->linkLabel = $object->linkLabel;
 
-		if (($object = $this->object) !== null) {
-			$this->setAttributes($object->getAttributes(['active', 'image', 'thumb', 'title', 'text', 'url', 'linkLabel']), false);
+		//file caching
+		Yii::$app->storage->cacheObject($object);
 
-			Yii::$app->storage->cacheObject($object);
-		}
+		parent::__construct($config);
 	}
 
 	/**
@@ -101,61 +107,30 @@ class BlockForm extends Model
 	}
 
 	/**
-	 * Creates new object using model attributes
-	 * @param simple\blocks\common\models\Group $group Parent block group
+	 * Save object using model attributes
 	 * @return boolean
 	 */
-	public function create($group)
+	public function save()
 	{
 		if (!$this->validate())
 			return false;
 
-		$this->object = $object = new Block([
-			'group_id' => $group->id,
-			'active' => (boolean) $this->active,
-			'image' => empty($this->image) ? null : $this->image,
-			'thumb' => empty($this->thumb) ? null : $this->thumb,
-			'title' => $this->title,
-			'text' => $this->text,
-			'url' => $this->url,
-			'linkLabel' => $this->linkLabel,
-		]);
+		$object = $this->_object;
+
+		$object->active = $this->active == 1;
+		$object->image = empty($this->image) ? null : $this->image;
+		$object->thumb = empty($this->thumb) ? null : $this->thumb;
+		$object->title = $this->title;
+		$object->text = $this->text;
+		$object->url = $this->url;
+		$object->linkLabel = $this->linkLabel;
 
 		Yii::$app->storage->storeObject($object);
 
 		if (!$object->save(false))
 			return false;
 
-		return true;
-	}
-
-	/**
-	 * Object updating
-	 * @return boolean
-	 */
-	public function update() {
-		if ($this->object === null)
-			return false;
-
-		if (!$this->validate())
-			return false;
-
-		$object = $this->object;
-
-		$object->setAttributes([
-			'active' => (boolean) $this->active,
-			'image' => empty($this->image) ? null : $this->image,
-			'thumb' => empty($this->thumb) ? null : $this->thumb,
-			'title' => $this->title,
-			'text' => $this->text,
-			'url' => $this->url,
-			'linkLabel' => $this->linkLabel,
-		], false);
-
-		Yii::$app->storage->storeObject($object);
-
-		if (!$object->save(false))
-			return false;
+		$object->group->updateBlockCount();
 
 		return true;
 	}

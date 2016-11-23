@@ -10,13 +10,23 @@ use yii\helpers\Html;
 	'options' => ['class' => 'group-form'],
 ]); ?>
 
-	<?= $form->field($model, 'alias') ?>
+	<?= $form->field($model, 'active')->checkbox() ?>
 
 	<?= $form->field($model, 'title') ?>
 
-	<?= $form->field($model, 'imageWidth') ?>
+	<?= $form->field($model, 'alias') ?>
 
-	<?= $form->field($model, 'imageHeight') ?>
+	<?php if ($model->blockCount) {
+		echo $form->field($model, 'imageWidth')->staticControl();
+	} else {
+		echo $form->field($model, 'imageWidth');	
+	} ?>
+
+	<?php if ($model->blockCount) {
+		echo $form->field($model, 'imageHeight')->staticControl();
+	} else {
+		echo $form->field($model, 'imageHeight');	
+	} ?>
 
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">

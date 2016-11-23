@@ -65,9 +65,11 @@ class BlockController extends Controller
 		if ($group === null)
 			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
 
-		$model = new BlockForm;
+		$object = new Block(['group_id' => $group->id]);
 
-		if ($model->load(Yii::$app->getRequest()->post()) && $model->create($group)) {
+		$model = new BlockForm($object);
+
+		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Changes saved successfully.'));
 			return $this->redirect(['index', 'group_id' => $group->id]);
 		}
@@ -93,9 +95,9 @@ class BlockController extends Controller
 		if ($group === null)
 			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
 
-		$model = new BlockForm(['object' => $object]);
+		$model = new BlockForm($object);
 
-		if ($model->load(Yii::$app->getRequest()->post()) && $model->update()) {
+		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Changes saved successfully.'));
 			return $this->redirect(['index', 'group_id' => $group->id]);
 		}
@@ -126,6 +128,8 @@ class BlockController extends Controller
 			
 			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Block deleted successfully.'));
 		}
+
+		$group->updateBlockCount();
 
 		return $this->redirect(['index', 'group_id' => $group->id]);
 	}

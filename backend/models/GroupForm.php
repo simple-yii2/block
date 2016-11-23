@@ -14,6 +14,11 @@ class GroupForm extends Model
 {
 
 	/**
+	 * @var boolean Active
+	 */
+	public $active;
+
+	/**
 	 * @var string Alias
 	 */
 	public $alias;
@@ -34,23 +39,26 @@ class GroupForm extends Model
 	public $imageHeight;
 
 	/**
-	 * @var ActiveRecord Assigned object.
+	 * @var \simple\blocks\common\models\Group
 	 */
-	public $object;
+	private $_object;
 
 	/**
 	 * @inheritdoc
+	 * @param \simple\blocks\common\models\Group $object 
 	 */
-	public function init()
+	public function __construct(\simple\blocks\common\models\Group $object, $config = [])
 	{
-		parent::init();
+		$this->_object = $object;
 
-		$this->imageWidth = 100;
-		$this->imageHeight = 100;
+		//attributes
+		$this->active = $object->active == 0 ? '0' : '1';
+		$this->alias = $object->alias;
+		$this->title = $object->title;
+		$this->imageWidth = $object->imageWidth;
+		$this->imageHeight = $object->imageHeight;
 
-		if (($object = $this->object) !== null) {
-			$this->setAttributes($object->getAttributes(['alias', 'title', 'imageWidth', 'imageHeight']), false);
-		}
+		parent::__construct($config);
 	}
 
 	/**
@@ -59,6 +67,7 @@ class GroupForm extends Model
 	public function attributeLabels()
 	{
 		return [
+			'active' => Yii::t('blocks', 'Active'),
 			'alias' => Yii::t('blocks', 'Alias'),
 			'title' => Yii::t('blocks', 'Title'),
 			'imageWidth' => Yii::t('blocks', 'Image width'),
@@ -72,53 +81,38 @@ class GroupForm extends Model
 	public function rules()
 	{
 		return [
+			['active', 'boolean'],
 			[['alias', 'title'], 'string', 'max' => 100],
 			[['imageWidth', 'imageHeight'], 'integer', 'min' => 32, 'max' => 1000],
-			[['alias', 'title', 'imageWidth', 'imageHeight'], 'required'],
+			[['alias', 'imageWidth', 'imageHeight'], 'required'],
 		];
 	}
 
 	/**
-	 * Creates new object using model attributes
+	 * Block count getter
+	 * @return integer
+	 */
+	public function getBlockCount()
+	{
+		return $this->_object->blockCount;
+	}
+
+	/**
+	 * Saving object using model attributes
 	 * @return boolean
 	 */
-	public function create()
+	public function save()
 	{
 		if (!$this->validate())
 			return false;
 
-		$this->object = $object = new Group([
-			'alias' => $this->alias,
-			'title' => $this->title,
-			'imageWidth' => $this->imageWidth,
-			'imageHeight' => $this->imageHeight,
-		]);
+		$object = $this->_object;
 
-		if (!$object->save(false))
-			return false;
-
-		return true;
-	}
-
-	/**
-	 * Object updating
-	 * @return boolean
-	 */
-	public function update() {
-		if ($this->object === null)
-			return false;
-
-		if (!$this->validate())
-			return false;
-
-		$object = $this->object;
-
-		$object->setAttributes([
-			'alias' => $this->alias,
-			'title' => $this->title,
-			'imageWidth' => $this->imageWidth,
-			'imageHeight' => $this->imageHeight,
-		], false);
+		$object->active = $this->active == 1;
+		$object->alias = $this->alias;
+		$object->title = $this->title;
+		$object->imageWidth = (integer) $this->imageWidth;
+		$object->imageWidth = (integer) $this->imageWidth;
 
 		if (!$object->save(false))
 			return false;

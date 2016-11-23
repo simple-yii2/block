@@ -9,6 +9,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
 use simple\blocks\backend\models\GroupForm;
+use simple\blocks\backend\models\GroupSearch;
 use simple\blocks\common\models\Group;
 
 /**
@@ -39,12 +40,11 @@ class GroupController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider = new ActiveDataProvider([
-			'query' => Group::find(),
-		]);
+		$model = new GroupSearch;
 
 		return $this->render('index', [
-			'dataProvider' => $dataProvider,
+			'dataProvider' => $model->search(Yii::$app->getRequest()->get()),
+			'model' => $model,
 		]);
 	}
 
@@ -54,9 +54,9 @@ class GroupController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new GroupForm;
+		$model = new GroupForm(new Group);
 
-		if ($model->load(Yii::$app->getRequest()->post()) && $model->create()) {
+		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Changes saved successfully.'));
 			return $this->redirect(['index']);
 		}
@@ -77,9 +77,9 @@ class GroupController extends Controller
 		if ($object === null)
 			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
 
-		$model = new GroupForm(['object' => $object]);
+		$model = new GroupForm($object);
 
-		if ($model->load(Yii::$app->getRequest()->post()) && $model->update()) {
+		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Changes saved successfully.'));
 			return $this->redirect(['index']);
 		}

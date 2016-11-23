@@ -4,6 +4,7 @@ namespace simple\blocks\common\models;
 
 use yii\db\ActiveRecord;
 
+use Yii;
 use storage\components\StoredInterface;
 
 /**
@@ -18,6 +19,26 @@ class Block extends ActiveRecord implements StoredInterface
 	public static function tableName()
 	{
 		return 'Block';
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function init()
+	{
+		parent::init();
+
+		$this->active = true;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'title' => Yii::t('blocks', 'Title'),
+		];
 	}
 
 	/**
