@@ -2,12 +2,12 @@
 
 use yii\helpers\Html;
 
-$title = Yii::t('blocks', 'Create block');
+$title = Yii::t('block', 'Create block');
 
 $this->title = $title . ' | ' . Yii::$app->name;
 
 $this->params['breadcrumbs'] = [
-	['label' => Yii::t('blocks', 'Block groups'), 'url' => ['group/index']],
+	['label' => Yii::t('block', 'Block groups'), 'url' => ['group/index']],
 	['label' => $group->title, 'url' => ['index']],
 	$title,
 ];

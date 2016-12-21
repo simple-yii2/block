@@ -1,6 +1,6 @@
 <?php
 
-namespace simple\blocks\backend\controllers;
+namespace cms\block\backend\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -8,9 +8,9 @@ use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use simple\blocks\backend\models\BlockForm;
-use simple\blocks\common\models\Group;
-use simple\blocks\common\models\Block;
+use cms\block\backend\models\BlockForm;
+use cms\block\common\models\Group;
+use cms\block\common\models\Block;
 
 /**
  * Blocks manage controller
@@ -28,7 +28,7 @@ class BlockController extends Controller
 			'access' => [
 				'class' => AccessControl::className(),
 				'rules' => [
-					['allow' => true, 'roles' => ['Blocks']],
+					['allow' => true, 'roles' => ['Block']],
 				],
 			],
 		];
@@ -43,7 +43,7 @@ class BlockController extends Controller
 	{
 		$group = Group::findOne($group_id);
 		if ($group === null)
-			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
+			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $group->getBlocks(),
@@ -63,14 +63,14 @@ class BlockController extends Controller
 	{
 		$group = Group::findOne($group_id);
 		if ($group === null)
-			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
+			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
 
 		$object = new Block(['group_id' => $group->id]);
 
 		$model = new BlockForm($object);
 
 		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
-			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Changes saved successfully.'));
+			Yii::$app->session->setFlash('success', Yii::t('block', 'Changes saved successfully.'));
 			return $this->redirect(['index', 'group_id' => $group->id]);
 		}
 
@@ -89,16 +89,16 @@ class BlockController extends Controller
 	{
 		$object = Block::findOne($id);
 		if ($object === null)
-			throw new BadRequestHttpException(Yii::t('blocks', 'Block not found.'));
+			throw new BadRequestHttpException(Yii::t('block', 'Block not found.'));
 
 		$group = $object->group;
 		if ($group === null)
-			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
+			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
 
 		$model = new BlockForm($object);
 
 		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
-			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Changes saved successfully.'));
+			Yii::$app->session->setFlash('success', Yii::t('block', 'Changes saved successfully.'));
 			return $this->redirect(['index', 'group_id' => $group->id]);
 		}
 
@@ -117,16 +117,16 @@ class BlockController extends Controller
 	{
 		$object = Block::findOne($id);
 		if ($object === null)
-			throw new BadRequestHttpException(Yii::t('blocks', 'Block not found.'));
+			throw new BadRequestHttpException(Yii::t('block', 'Block not found.'));
 
 		$group = $object->group;
 		if ($group === null)
-			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
+			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
 
 		if ($object->delete()) {
 			Yii::$app->storage->removeObject($object);
 			
-			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Block deleted successfully.'));
+			Yii::$app->session->setFlash('success', Yii::t('block', 'Block deleted successfully.'));
 		}
 
 		$group->updateBlockCount();

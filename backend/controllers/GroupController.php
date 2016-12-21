@@ -1,15 +1,15 @@
 <?php
 
-namespace simple\blocks\backend\controllers;
+namespace cms\block\backend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use simple\blocks\backend\models\GroupForm;
-use simple\blocks\backend\models\GroupSearch;
-use simple\blocks\common\models\Group;
+use cms\block\backend\models\GroupForm;
+use cms\block\backend\models\GroupSearch;
+use cms\block\common\models\Group;
 
 /**
  * Block groups manage controller
@@ -27,7 +27,7 @@ class GroupController extends Controller
 			'access' => [
 				'class' => AccessControl::className(),
 				'rules' => [
-					['allow' => true, 'roles' => ['Blocks']],
+					['allow' => true, 'roles' => ['Block']],
 				],
 			],
 		];
@@ -56,7 +56,7 @@ class GroupController extends Controller
 		$model = new GroupForm(new Group);
 
 		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
-			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Changes saved successfully.'));
+			Yii::$app->session->setFlash('success', Yii::t('block', 'Changes saved successfully.'));
 			return $this->redirect(['index']);
 		}
 
@@ -74,12 +74,12 @@ class GroupController extends Controller
 	{
 		$object = Group::findOne($id);
 		if ($object === null)
-			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
+			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
 
 		$model = new GroupForm($object);
 
 		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
-			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Changes saved successfully.'));
+			Yii::$app->session->setFlash('success', Yii::t('block', 'Changes saved successfully.'));
 			return $this->redirect(['index']);
 		}
 
@@ -97,7 +97,7 @@ class GroupController extends Controller
 	{
 		$object = Group::findOne($id);
 		if ($object === null)
-			throw new BadRequestHttpException(Yii::t('blocks', 'Group not found.'));
+			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
 
 		foreach ($object->blocks as $block) {
 			$block->delete();
@@ -105,7 +105,7 @@ class GroupController extends Controller
 		}
 
 		if ($object->delete()) {
-			Yii::$app->session->setFlash('success', Yii::t('blocks', 'Group deleted successfully.'));
+			Yii::$app->session->setFlash('success', Yii::t('block', 'Group deleted successfully.'));
 		}
 
 		return $this->redirect(['index']);

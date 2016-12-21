@@ -1,11 +1,11 @@
 <?php
 
-namespace simple\blocks\backend\models;
+namespace cms\block\backend\models;
 
 use Yii;
 use yii\data\ActiveDataProvider;
 
-use simple\blocks\common\models\Group;
+use cms\block\common\models\Group;
 
 /**
  * Group search model
@@ -13,12 +13,21 @@ use simple\blocks\common\models\Group;
 class GroupSearch extends Group {
 
 	/**
-	 * Search rules
-	 * @return array
+	 * @inheritdoc
 	 */
 	public function rules() {
 		return [
 			['title', 'string'],
+		];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'title' => Yii::t('block', 'Title'),
 		];
 	}
 
@@ -29,7 +38,7 @@ class GroupSearch extends Group {
 	 */
 	public function search($params) {
 		//ActiveQuery
-		$query = Group::find();
+		$query = static::find();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,

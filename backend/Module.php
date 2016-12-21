@@ -1,6 +1,6 @@
 <?php
 
-namespace simple\blocks\backend;
+namespace cms\block\backend;
 
 use Yii;
 
@@ -37,9 +37,9 @@ class Module extends \yii\base\Module {
 
 		//rbac
 		$auth = Yii::$app->getAuthManager();
-		if ($auth->getRole('Blocks') === null) {
+		if ($auth->getRole('Block') === null) {
 			//blocks role
-			$blocks = $auth->createRole('Blocks');
+			$blocks = $auth->createRole('Block');
 			$auth->add($blocks);
 		}
 	}
@@ -50,8 +50,8 @@ class Module extends \yii\base\Module {
 	 */
 	protected static function addTranslation()
 	{
-		if (!isset(Yii::$app->i18n->translations['blocks'])) {
-			Yii::$app->i18n->translations['blocks'] = [
+		if (!isset(Yii::$app->i18n->translations['block'])) {
+			Yii::$app->i18n->translations['block'] = [
 				'class' => 'yii\i18n\PhpMessageSource',
 				'sourceLanguage' => 'en-US',
 				'basePath' => dirname(__DIR__) . '/messages',
@@ -68,9 +68,9 @@ class Module extends \yii\base\Module {
 	{
 		self::addTranslation();
 
-		if (Yii::$app->user->can('Blocks')) {
+		if (Yii::$app->user->can('Block')) {
 			return [
-				['label' => Yii::t('blocks', 'Blocks'), 'url' => ["$base/blocks/group/index"]],
+				['label' => Yii::t('block', 'Blocks'), 'url' => ["$base/block/group/index"]],
 			];
 		}
 		

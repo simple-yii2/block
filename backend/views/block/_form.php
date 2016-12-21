@@ -33,8 +33,8 @@ use uploadimage\widgets\UploadImage;
 
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">
-			<?= Html::submitButton(Yii::t('blocks', 'Save'), ['class' => 'btn btn-primary']) ?>
-			<?= Html::a(Yii::t('blocks', 'Cancel'), ['index', 'group_id' => $group->id], ['class' => 'btn btn-default']) ?>
+			<?= Html::submitButton(Yii::t('block', 'Save'), ['class' => 'btn btn-primary']) ?>
+			<?= Html::a(Yii::t('block', 'Cancel'), ['index', 'group_id' => $group->id], ['class' => 'btn btn-default']) ?>
 		</div>
 	</div>
 

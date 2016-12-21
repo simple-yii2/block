@@ -1,12 +1,12 @@
 <?php
 
-namespace simple\blocks\frontend\widgets;
+namespace cms\block\frontend\widgets;
 
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\helpers\Html;
 
-use simple\blocks\common\models;
+use cms\block\common\models;
 
 class Blocks extends Widget
 {
@@ -47,7 +47,7 @@ class Blocks extends Widget
 	public $encodeText = true;
 
 	/**
-	 * @var simple\common\models\Group Group model
+	 * @var cms\commo\models\Group Group model
 	 */
 	private $model;
 
@@ -86,10 +86,10 @@ class Blocks extends Widget
 
 	/**
 	 * Item rendering
-	 * @param \simple\blocks\common\models\Block $item 
+	 * @param \cms\block\common\models\Block $item 
 	 * @return string
 	 */
-	protected function renderItem($item)
+	protected function renderItem(\cms\block\common\models\Block $item)
 	{
 		$replace = [
 			'{image}' => $this->renderImage($item),
@@ -105,10 +105,10 @@ class Blocks extends Widget
 
 	/**
 	 * Image rendering
-	 * @param \simple\blocks\common\models\Block $item 
+	 * @param \cms\block\common\models\Block $item 
 	 * @return string
 	 */
-	protected function renderImage($item)
+	protected function renderImage(\cms\block\common\models\Block $item)
 	{
 		$title = strip_tags($item->title);
 
@@ -122,10 +122,10 @@ class Blocks extends Widget
 
 	/**
 	 * Title rendering
-	 * @param \simple\blocks\common\models\Block $item 
+	 * @param \cms\block\common\models\Block $item 
 	 * @return string
 	 */
-	protected function renderTitle($item)
+	protected function renderTitle(\cms\block\common\models\Block $item)
 	{
 		$title = $item->title;
 
@@ -137,10 +137,10 @@ class Blocks extends Widget
 
 	/**
 	 * Text rendering
-	 * @param \simple\blocks\common\models\Block $item 
+	 * @param \cms\block\common\models\Block $item 
 	 * @return string
 	 */
-	protected function renderText($item)
+	protected function renderText(\cms\block\common\models\Block $item)
 	{
 		$text = $item->text;
 
@@ -152,10 +152,10 @@ class Blocks extends Widget
 
 	/**
 	 * Link rendering
-	 * @param \simple\blocks\common\models\Block $item 
+	 * @param \cms\block\common\models\Block $item 
 	 * @return string
 	 */
-	protected function renderLink($item)
+	protected function renderLink(\cms\block\common\models\Block $item)
 	{
 		$options = [];
 		Html::addCssClass($options, $this->linkCssClass);

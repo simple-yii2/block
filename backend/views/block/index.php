@@ -8,7 +8,7 @@ $title = $group->title;
 $this->title = $title . ' | ' . Yii::$app->name;
 
 $this->params['breadcrumbs'] = [
-	['label' => Yii::t('blocks', 'Block groups'), 'url' => ['group/index']],
+	['label' => Yii::t('block', 'Block groups'), 'url' => ['group/index']],
 	$title,
 ];
 
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'] = [
 <h1><?= Html::encode($title) ?></h1>
 
 <div class="btn-toolbar" role="toolbar">
-	<?= Html::a(Yii::t('blocks', 'Create block'), ['create', 'group_id' => $group->id], ['class' => 'btn btn-primary']) ?>
+	<?= Html::a(Yii::t('block', 'Create block'), ['create', 'group_id' => $group->id], ['class' => 'btn btn-primary']) ?>
 </div>
 
 <?= GridView::widget([

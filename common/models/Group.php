@@ -1,6 +1,6 @@
 <?php
 
-namespace simple\blocks\common\models;
+namespace cms\block\common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -30,16 +30,6 @@ class Group extends ActiveRecord
 		$this->imageWidth = 100;
 		$this->imageHeight = 100;
 		$this->blockCount = 0;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels()
-	{
-		return [
-			'title' => Yii::t('blocks', 'Title'),
-		];
 	}
 
 	/**

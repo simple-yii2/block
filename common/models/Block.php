@@ -1,6 +1,6 @@
 <?php
 
-namespace simple\blocks\common\models;
+namespace cms\block\common\models;
 
 use yii\db\ActiveRecord;
 
@@ -37,7 +37,7 @@ class Block extends ActiveRecord implements StoredInterface
 	public function attributeLabels()
 	{
 		return [
-			'title' => Yii::t('blocks', 'Title'),
+			'title' => Yii::t('block', 'Title'),
 		];
 	}
 

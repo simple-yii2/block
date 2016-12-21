@@ -1,11 +1,11 @@
 <?php
 
-namespace simple\blocks\backend\models;
+namespace cms\block\backend\models;
 
 use Yii;
 use yii\base\Model;
 
-use simple\blocks\common\models\Block;
+use cms\block\common\models\Block;
 
 /**
  * Block editing form
@@ -49,15 +49,15 @@ class BlockForm extends Model
 	public $linkLabel;
 
 	/**
-	 * @var \simple\blocks\common\models\Block
+	 * @var \cms\block\common\models\Block
 	 */
 	private $_object;
 
 	/**
 	 * @inheritdoc
-	 * @param \simple\blocks\common\models\Block $object 
+	 * @param \cms\block\common\models\Block $object 
 	 */
-	public function __construct(\simple\blocks\common\models\Block $object, $config = [])
+	public function __construct(\cms\block\common\models\Block $object, $config = [])
 	{
 		$this->_object = $object;
 
@@ -82,12 +82,12 @@ class BlockForm extends Model
 	public function attributeLabels()
 	{
 		return [
-			'active' => Yii::t('blocks', 'Active'),
-			'image' => Yii::t('blocks', 'Image'),
-			'title' => Yii::t('blocks', 'Title'),
-			'text' => Yii::t('blocks', 'Text'),
-			'url' => Yii::t('blocks', 'Url'),
-			'linkLabel' => Yii::t('blocks', 'Link label'),
+			'active' => Yii::t('block', 'Active'),
+			'image' => Yii::t('block', 'Image'),
+			'title' => Yii::t('block', 'Title'),
+			'text' => Yii::t('block', 'Text'),
+			'url' => Yii::t('block', 'Url'),
+			'linkLabel' => Yii::t('block', 'Link label'),
 		];
 	}
 

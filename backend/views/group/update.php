@@ -7,7 +7,7 @@ $title = $model->title;
 $this->title = $title . ' | ' . Yii::$app->name;
 
 $this->params['breadcrumbs'] = [
-	['label' => Yii::t('blocks', 'Block groups'), 'url' => ['index']],
+	['label' => Yii::t('block', 'Block groups'), 'url' => ['index']],
 	$title,
 ];
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace simple\blocks\backend\models;
+namespace cms\block\backend\models;
 
 use Yii;
 use yii\base\Model;
 
-use simple\blocks\common\models\Group;
+use cms\block\common\models\Group;
 
 /**
  * Block group editing form
@@ -39,15 +39,15 @@ class GroupForm extends Model
 	public $imageHeight;
 
 	/**
-	 * @var \simple\blocks\common\models\Group
+	 * @var \cms\block\common\models\Group
 	 */
 	private $_object;
 
 	/**
 	 * @inheritdoc
-	 * @param \simple\blocks\common\models\Group $object 
+	 * @param \cms\block\common\models\Group $object 
 	 */
-	public function __construct(\simple\blocks\common\models\Group $object, $config = [])
+	public function __construct(\cms\block\common\models\Group $object, $config = [])
 	{
 		$this->_object = $object;
 
@@ -67,11 +67,11 @@ class GroupForm extends Model
 	public function attributeLabels()
 	{
 		return [
-			'active' => Yii::t('blocks', 'Active'),
-			'alias' => Yii::t('blocks', 'Alias'),
-			'title' => Yii::t('blocks', 'Title'),
-			'imageWidth' => Yii::t('blocks', 'Image width'),
-			'imageHeight' => Yii::t('blocks', 'Image height'),
+			'active' => Yii::t('block', 'Active'),
+			'alias' => Yii::t('block', 'Alias'),
+			'title' => Yii::t('block', 'Title'),
+			'imageWidth' => Yii::t('block', 'Image width'),
+			'imageHeight' => Yii::t('block', 'Image height'),
 		];
 	}
 
