@@ -1,6 +1,6 @@
 {
-    "name": "simple-yii2/blocks",
-    "description": "Blocks module for Yii 2 framework",
+    "name": "simple-yii2/block",
+    "description": "Block module for Yii 2 framework",
     "type": "yii2-module",
     "keywords": ["yii2","module","blocks"],
     "license": "BSD-3-Clause",
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "simple\\blocks\\": ""
+            "cms\\block\\": ""
         }
     }
 }
