@@ -29,6 +29,7 @@ class Block extends ActiveRecord implements StoredInterface
 		parent::init();
 
 		$this->active = true;
+		$this->url = '#';
 	}
 
 	/**

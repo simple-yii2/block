@@ -102,7 +102,6 @@ class BlockForm extends Model
 			['text', 'string', 'max' => 500],
 			[['title', 'linkLabel'], 'string', 'max' => 100],
 			[['title', 'url'], 'required'],
-			['url', 'url'],
 		];
 	}
 

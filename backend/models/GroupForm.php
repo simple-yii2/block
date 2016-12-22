@@ -39,13 +39,13 @@ class GroupForm extends Model
 	public $imageHeight;
 
 	/**
-	 * @var \cms\block\common\models\Group
+	 * @var cms\block\common\models\Group
 	 */
 	private $_object;
 
 	/**
 	 * @inheritdoc
-	 * @param \cms\block\common\models\Group $object 
+	 * @param cms\block\common\models\Group $object 
 	 */
 	public function __construct(\cms\block\common\models\Group $object, $config = [])
 	{
