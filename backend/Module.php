@@ -38,9 +38,9 @@ class Module extends \yii\base\Module {
 		//rbac
 		$auth = Yii::$app->getAuthManager();
 		if ($auth->getRole('Block') === null) {
-			//blocks role
-			$blocks = $auth->createRole('Block');
-			$auth->add($blocks);
+			//role
+			$role = $auth->createRole('Block');
+			$auth->add($role);
 		}
 	}
 
