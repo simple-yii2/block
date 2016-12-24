@@ -49,13 +49,13 @@ class BlockForm extends Model
 	public $linkLabel;
 
 	/**
-	 * @var \cms\block\common\models\Block
+	 * @var cms\block\common\models\Block
 	 */
 	private $_object;
 
 	/**
 	 * @inheritdoc
-	 * @param \cms\block\common\models\Block $object 
+	 * @param cms\block\common\models\Block $object 
 	 */
 	public function __construct(\cms\block\common\models\Block $object, $config = [])
 	{
