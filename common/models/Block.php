@@ -4,7 +4,6 @@ namespace cms\block\common\models;
 
 use yii\db\ActiveRecord;
 
-use Yii;
 use storage\components\StoredInterface;
 
 /**
@@ -30,16 +29,6 @@ class Block extends ActiveRecord implements StoredInterface
 
 		$this->active = true;
 		$this->url = '#';
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels()
-	{
-		return [
-			'title' => Yii::t('block', 'Title'),
-		];
 	}
 
 	/**
