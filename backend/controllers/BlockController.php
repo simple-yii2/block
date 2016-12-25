@@ -12,15 +12,11 @@ use cms\block\backend\models\BlockForm;
 use cms\block\common\models\Group;
 use cms\block\common\models\Block;
 
-/**
- * Blocks manage controller
- */
 class BlockController extends Controller
 {
 
 	/**
-	 * Access control
-	 * @return array
+	 * @inheritdoc
 	 */
 	public function behaviors()
 	{

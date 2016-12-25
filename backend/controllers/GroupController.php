@@ -11,15 +11,11 @@ use cms\block\backend\models\GroupForm;
 use cms\block\backend\models\GroupSearch;
 use cms\block\common\models\Group;
 
-/**
- * Block groups manage controller
- */
 class GroupController extends Controller
 {
 
 	/**
-	 * Access control
-	 * @return array
+	 * @inheritdoc
 	 */
 	public function behaviors()
 	{
