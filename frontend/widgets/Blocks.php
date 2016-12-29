@@ -3,12 +3,13 @@
 namespace cms\block\frontend\widgets;
 
 use yii\base\InvalidConfigException;
-use yii\base\Widget;
+use yii\data\ArrayDataProvider;
 use yii\helpers\Html;
+use yii\widgets\ListView;
 
-use cms\block\common\models;
+use cms\block\common\models\Group;
 
-class Blocks extends Widget
+class Blocks extends ListView
 {
 
 	/**
@@ -17,154 +18,83 @@ class Blocks extends Widget
 	public $alias;
 
 	/**
-	 * @var array Container tag options
+	 * @inheritdoc
+	 */
+	public $layout = '{items}';
+
+	/**
+	 * @inheritdoc
+	 */
+	public $itemOptions = ['class' => 'col-md-4'];
+
+	/**
+	 * @inheritdoc
 	 */
 	public $options = ['class' => 'row'];
-
-	/**
-	 * @var string Block template
-	 */
-	public $itemTemplate = '{image}{title}{text}{link}';
-
-	/**
-	 * @var string Item CSS class
-	 */
-	public $itemCssClass = 'col-md-4';
-
-	/**
-	 * @var string Link Css class
-	 */
-	public $linkCssClass = 'btn btn-default';
-
-	/**
-	 * @var boolean Title encode
-	 */
-	public $encodeTitle = true;
-
-	/**
-	 * @var boolean Text encode
-	 */
-	public $encodeText = true;
-
-	/**
-	 * @var cms\commo\models\Group Group model
-	 */
-	private $model;
 
 	/**
 	 * @inheritdoc
 	 */
 	public function init()
 	{
-		parent::init();
-
 		if ($this->alias === null)
-			throw new InvalidConfigException('Property "alias" must be set.');
+			throw new InvalidConfigException('The "alias" property must be set.');
 
-		$this->model = models\Group::findByAlias($this->alias);
+		$this->prepareDataProvider();
 
-		if ($this->model && !$this->model->active)
-			$this->model = null;
+		if ($this->itemView === null)
+			$this->prepareItemView();
+
+		parent::init();
 	}
 
 	/**
-	 * @inheritdoc
+	 * Preparing data provider
+	 * @return void
 	 */
-	public function run()
+	private function prepareDataProvider()
 	{
-		echo Html::beginTag('div', $this->options);
+		$blocks = [];
 
-		if ($this->model !== null) {
-			foreach ($this->model->blocks as $item) {
-				if ($item->active)
-					echo $this->renderItem($item);
+		$group = Group::findByAlias($this->alias);
+		if ($group !== null && $group->active) {
+			foreach ($group->blocks as $block) {
+				if ($block->active)
+					$blocks[] = $block;
 			}
 		}
 
-		echo Html::endTag('div');
-	}
-
-	/**
-	 * Item rendering
-	 * @param \cms\block\common\models\Block $item 
-	 * @return string
-	 */
-	protected function renderItem(\cms\block\common\models\Block $item)
-	{
-		$replace = [
-			'{image}' => $this->renderImage($item),
-			'{title}' => $this->renderTitle($item),
-			'{text}' => $this->renderText($item),
-			'{link}' => $this->renderLink($item),
-		];
-
-		return Html::tag('div', strtr($this->itemTemplate, $replace), [
-			'class' => $this->itemCssClass,
+		$this->dataProvider = new ArrayDataProvider([
+			'allModels' => $blocks,
+			'pagination' => false,
 		]);
 	}
 
 	/**
-	 * Image rendering
-	 * @param \cms\block\common\models\Block $item 
-	 * @return string
+	 * Preparing item view function
+	 * @return void
 	 */
-	protected function renderImage(\cms\block\common\models\Block $item)
+	private function prepareItemView()
 	{
-		$title = strip_tags($item->title);
+		$this->itemView = function($model, $key, $index, $widget) {
+			$image = '';
+			if (!empty($model->thumb)) {
+				$image = Html::img($model->thumb, ['alt' => $model->title]);
+				$image = Html::tag('div', $image);
+			}
 
-		$image = Html::img($item->thumb, [
-			'alt' => $title,
-			'title' => $title,
-		]);
+			$title = Html::tag('h2', Html::encode($model->title));
 
-		return Html::tag('div', $image, ['class' => 'block-image']);
-	}
+			$text = '';
+			if (!empty($model->text))
+				$text = Html::tag('p', Html::encode($model->text));
 
-	/**
-	 * Title rendering
-	 * @param \cms\block\common\models\Block $item 
-	 * @return string
-	 */
-	protected function renderTitle(\cms\block\common\models\Block $item)
-	{
-		$title = $item->title;
+			$label = empty($model->linkLabel) ? Html::encode($model->title) . '&nbsp;&raquo;' : Html::encode($model->linkLabel);
+			$link = Html::a($label, $model->url, ['class' => 'btn btn-default']);
+			$link = Html::tag('p', $link);
 
-		if ($this->encodeTitle)
-			$title = Html::encode($title);
-
-		return Html::tag('div', $title, ['class' => 'block-title h1']);
-	}
-
-	/**
-	 * Text rendering
-	 * @param \cms\block\common\models\Block $item 
-	 * @return string
-	 */
-	protected function renderText(\cms\block\common\models\Block $item)
-	{
-		$text = $item->text;
-
-		if ($this->encodeText)
-			$text = Html::encode($text);
-
-		return Html::tag('p', $text, ['class' => 'block-text']);
-	}
-
-	/**
-	 * Link rendering
-	 * @param \cms\block\common\models\Block $item 
-	 * @return string
-	 */
-	protected function renderLink(\cms\block\common\models\Block $item)
-	{
-		$options = [];
-		Html::addCssClass($options, $this->linkCssClass);
-
-		$label = Html::encode($item->linkLabel);
-		if (empty($label))
-			$label = strip_tags($item->title) . ' &raquo;';
-
-		return Html::a($label, $item->url, $options);
+			return $image . $title . $text . $link;
+		};
 	}
 
 }
