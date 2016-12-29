@@ -2,9 +2,10 @@
 
 namespace cms\block\common\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 
-use storage\components\StoredInterface;
+use dkhlystov\storage\components\StoredInterface;
 
 /**
  * Block active record
@@ -29,6 +30,13 @@ class Block extends ActiveRecord implements StoredInterface
 
 		$this->active = true;
 		$this->url = '#';
+	}
+
+	public function attributeLabels()
+	{
+		return [
+			'title' => Yii::t('block', 'Title'),
+		];
 	}
 
 	/**

@@ -3,7 +3,9 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
-use uploadimage\widgets\UploadImage;
+use dkhlystov\uploadimage\widgets\UploadImage;
+
+$imageSize = '<br><span class="label label-default">' . $group->imageWidth . '&times' . $group->imageHeight . '</span>';
 
 ?>
 <?php $form = ActiveForm::begin([
@@ -14,7 +16,7 @@ use uploadimage\widgets\UploadImage;
 
 	<?= $form->field($model, 'active')->checkbox() ?>
 
-	<?= $form->field($model, 'image')->widget(UploadImage::className(), [
+	<?= $form->field($model, 'image')->label($model->getAttributeLabel('image') . $imageSize)->widget(UploadImage::className(), [
 		'thumbAttribute' => 'thumb',
 		'maxImageWidth' => 1000,
 		'maxImageHeight' => 1000,
