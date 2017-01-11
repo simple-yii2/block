@@ -24,5 +24,6 @@ create table if not exists `Block`
 	`url` varchar(200) default null,
 	`linkLabel` varchar(100) default null,
 	primary key (`id`),
+	foreign key (`group_id`) references `BlockGroup` (`id`) on delete cascade on update cascade,
 	key `group_id` (`group_id`)
 ) engine InnoDB;
