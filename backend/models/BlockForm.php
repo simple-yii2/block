@@ -34,6 +34,11 @@ class BlockForm extends Model
 	public $title;
 
 	/**
+	 * @var string Lead
+	 */
+	public $lead;
+
+	/**
 	 * @var string Text
 	 */
 	public $text;
@@ -66,6 +71,7 @@ class BlockForm extends Model
 		$this->image = $object->image;
 		$this->thumb = $object->thumb;
 		$this->title = $object->title;
+		$this->lead = $object->lead;
 		$this->text = $object->text;
 		$this->url = $object->url;
 		$this->linkLabel = $object->linkLabel;
@@ -85,6 +91,7 @@ class BlockForm extends Model
 			'active' => Yii::t('block', 'Active'),
 			'image' => Yii::t('block', 'Image'),
 			'title' => Yii::t('block', 'Title'),
+			'lead' => Yii::t('block', 'Lead'),
 			'text' => Yii::t('block', 'Text'),
 			'url' => Yii::t('block', 'Url'),
 			'linkLabel' => Yii::t('block', 'Link label'),
@@ -98,7 +105,7 @@ class BlockForm extends Model
 	{
 		return [
 			['active', 'boolean'],
-			[['image', 'thumb', 'url'], 'string', 'max' => 200],
+			[['image', 'thumb', 'url', 'lead'], 'string', 'max' => 200],
 			['text', 'string', 'max' => 500],
 			[['title', 'linkLabel'], 'string', 'max' => 100],
 			[['title', 'url'], 'required'],
@@ -120,6 +127,7 @@ class BlockForm extends Model
 		$object->image = empty($this->image) ? null : $this->image;
 		$object->thumb = empty($this->thumb) ? null : $this->thumb;
 		$object->title = $this->title;
+		$object->lead = $this->lead;
 		$object->text = $this->text;
 		$object->url = $this->url;
 		$object->linkLabel = $this->linkLabel;

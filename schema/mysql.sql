@@ -10,6 +10,7 @@ create table if not exists `BlockGroup`
 	primary key (`id`),
 	key `alias` (`alias`)
 ) engine InnoDB;
+
 create table if not exists `Block`
 (
 	`id` int(10) not null auto_increment,
@@ -18,6 +19,7 @@ create table if not exists `Block`
 	`image` varchar(200) default null,
 	`thumb` varchar(200) default null,
 	`title` varchar(100) default null,
+	`lead` varchar(200) default null,
 	`text` text,
 	`url` varchar(200) default null,
 	`linkLabel` varchar(100) default null,
