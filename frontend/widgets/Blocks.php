@@ -35,6 +35,11 @@ class Blocks extends ListView
 	/**
 	 * @inheritdoc
 	 */
+	public $emptyText = '';
+
+	/**
+	 * @inheritdoc
+	 */
 	public function init()
 	{
 		if ($this->alias === null)
