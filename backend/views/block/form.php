@@ -27,6 +27,8 @@ $imageSize = '<br><span class="label label-default">' . $parent->imageWidth . '&
 
 	<?= $form->field($model, 'title') ?>
 
+	<?= $form->field($model, 'lead')->textarea(['rows' => 3]) ?>
+
 	<?= $form->field($model, 'text')->textarea(['rows' => 5]) ?>
 
 	<?= $form->field($model, 'url') ?>

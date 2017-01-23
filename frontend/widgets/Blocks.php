@@ -35,6 +35,11 @@ class Blocks extends ListView
 	/**
 	 * @inheritdoc
 	 */
+	public $emptyText = '';
+
+	/**
+	 * @inheritdoc
+	 */
 	public function init()
 	{
 		if ($this->alias === null)
@@ -85,6 +90,10 @@ class Blocks extends ListView
 
 			$title = Html::tag('h2', Html::encode($model->title));
 
+			$lead = '';
+			if (!empty($model->lead))
+				$lead = Html::tag('p', Html::encode($model->lead), ['class' => 'lead']);
+
 			$text = '';
 			if (!empty($model->text))
 				$text = Html::tag('p', Html::encode($model->text));
@@ -93,7 +102,7 @@ class Blocks extends ListView
 			$link = Html::a($label, $model->url, ['class' => 'btn btn-default']);
 			$link = Html::tag('p', $link);
 
-			return $image . $title . $text . $link;
+			return $image . $title . $lead . $text . $link;
 		};
 	}
 

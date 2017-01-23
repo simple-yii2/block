@@ -96,7 +96,7 @@ class GroupForm extends Model
 			['active', 'boolean'],
 			[['alias', 'title'], 'string', 'max' => 100],
 			[['imageWidth', 'imageHeight'], 'integer', 'min' => 32, 'max' => 1000],
-			[['alias', 'imageWidth', 'imageHeight'], 'required'],
+			[['alias', 'title', 'imageWidth', 'imageHeight'], 'required'],
 		];
 	}
 
