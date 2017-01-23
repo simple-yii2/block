@@ -5,7 +5,7 @@ use yii\helpers\Html;
 
 use dkhlystov\uploadimage\widgets\UploadImage;
 
-$imageSize = '<br><span class="label label-default">' . $group->imageWidth . '&times' . $group->imageHeight . '</span>';
+$imageSize = '<br><span class="label label-default">' . $parent->imageWidth . '&times' . $parent->imageHeight . '</span>';
 
 ?>
 <?php $form = ActiveForm::begin([
@@ -20,8 +20,8 @@ $imageSize = '<br><span class="label label-default">' . $group->imageWidth . '&t
 		'thumbAttribute' => 'thumb',
 		'maxImageWidth' => 1000,
 		'maxImageHeight' => 1000,
-		'thumbWidth' => $group->imageWidth,
-		'thumbHeight' => $group->imageHeight,
+		'thumbWidth' => $parent->imageWidth,
+		'thumbHeight' => $parent->imageHeight,
 		'maxFileSize' => 2048,
 	]) ?>
 
@@ -36,7 +36,7 @@ $imageSize = '<br><span class="label label-default">' . $group->imageWidth . '&t
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">
 			<?= Html::submitButton(Yii::t('block', 'Save'), ['class' => 'btn btn-primary']) ?>
-			<?= Html::a(Yii::t('block', 'Cancel'), ['index', 'group_id' => $group->id], ['class' => 'btn btn-default']) ?>
+			<?= Html::a(Yii::t('block', 'Cancel'), ['group/index', 'id' => $id], ['class' => 'btn btn-default']) ?>
 		</div>
 	</div>
 

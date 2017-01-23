@@ -2,21 +2,11 @@
 
 namespace cms\block\common\models;
 
-use yii\db\ActiveRecord;
-
 /**
  * Blocks group active record
  */
-class Group extends ActiveRecord
+class Group extends BaseBlock
 {
-
-	/**
-	 * @inheritdoc
-	 */
-	public static function tableName()
-	{
-		return 'BlockGroup';
-	}
 
 	/**
 	 * @inheritdoc
@@ -25,19 +15,23 @@ class Group extends ActiveRecord
 	{
 		parent::init();
 
-		$this->active = true;
-		$this->imageWidth = 100;
-		$this->imageHeight = 100;
-		$this->blockCount = 0;
+		if ($this->active === null)
+			$this->active = true;
+
+		if ($this->imageWidth === null)
+			$this->imageWidth = 100;
+
+		if ($this->imageHeight === null)
+			$this->imageHeight = 100;
 	}
 
 	/**
-	 * Blocks relation
-	 * @return yii\db\ActiveQueryInterface
+	 * Blocks
+	 * @return Block[]
 	 */
 	public function getBlocks()
 	{
-		return $this->hasMany(Block::className(), ['group_id' => 'id'])->inverseOf('group');
+		return $this->children()->all();
 	}
 
 	/**
@@ -51,16 +45,6 @@ class Group extends ActiveRecord
 			$model = static::findOne(['id' => $alias]);
 
 		return $model;
-	}
-
-	/**
-	 * Updates block count
-	 * @return void
-	 */
-	public function updateBlockCount()
-	{
-		$this->blockCount = $this->getBlocks()->count();
-		$this->update(false, ['blockCount']);
 	}
 
 }

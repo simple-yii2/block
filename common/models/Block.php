@@ -3,23 +3,14 @@
 namespace cms\block\common\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 use dkhlystov\storage\components\StoredInterface;
 
 /**
  * Block active record
  */
-class Block extends ActiveRecord implements StoredInterface
+class Block extends BaseBlock implements StoredInterface
 {
-
-	/**
-	 * @inheritdoc
-	 */
-	public static function tableName()
-	{
-		return 'Block';
-	}
 
 	/**
 	 * @inheritdoc
@@ -28,24 +19,11 @@ class Block extends ActiveRecord implements StoredInterface
 	{
 		parent::init();
 
-		$this->active = true;
-		$this->url = '#';
-	}
+		if ($this->active === null)
+			$this->active = true;
 
-	public function attributeLabels()
-	{
-		return [
-			'title' => Yii::t('block', 'Title'),
-		];
-	}
-
-	/**
-	 * Group relation
-	 * @return yii\db\ActiveQueryInterface
-	 */
-	public function getGroup()
-	{
-		return $this->hasOne(Group::className(), ['id' => 'group_id']);
+		if ($this->url === null)
+			$this->url = '#';
 	}
 
 	/**

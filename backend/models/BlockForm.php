@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 
 use cms\block\common\models\Block;
+use cms\block\common\models\Group;
 
 /**
  * Block editing form
@@ -49,16 +50,19 @@ class BlockForm extends Model
 	public $linkLabel;
 
 	/**
-	 * @var cms\block\common\models\Block
+	 * @var Block
 	 */
 	private $_object;
 
 	/**
 	 * @inheritdoc
-	 * @param cms\block\common\models\Block $object 
+	 * @param Block|null $object 
 	 */
-	public function __construct(\cms\block\common\models\Block $object, $config = [])
+	public function __construct(Block $object = null, $config = [])
 	{
+		if ($object === null)
+			$object = new Block;
+
 		$this->_object = $object;
 
 		//attributes
@@ -74,6 +78,15 @@ class BlockForm extends Model
 		Yii::$app->storage->cacheObject($object);
 
 		parent::__construct($config);
+	}
+
+	/**
+	 * Object getter
+	 * @return Block
+	 */
+	public function getObject()
+	{
+		return $this->_object;
 	}
 
 	/**
@@ -106,16 +119,18 @@ class BlockForm extends Model
 	}
 
 	/**
-	 * Save object using model attributes
+	 * Object saving
+	 * @param Group|null $parent 
 	 * @return boolean
 	 */
-	public function save()
+	public function save(Group $parent = null)
 	{
 		if (!$this->validate())
 			return false;
 
 		$object = $this->_object;
 
+		//attributes
 		$object->active = $this->active == 1;
 		$object->image = empty($this->image) ? null : $this->image;
 		$object->thumb = empty($this->thumb) ? null : $this->thumb;
@@ -124,12 +139,17 @@ class BlockForm extends Model
 		$object->url = $this->url;
 		$object->linkLabel = $this->linkLabel;
 
+		//files
 		Yii::$app->storage->storeObject($object);
 
-		if (!$object->save(false))
-			return false;
-
-		$object->group->updateBlockCount();
+		//saving object
+		if ($object->getIsNewRecord()) {
+			if (!$object->appendTo($parent, false))
+				return false;
+		} else {
+			if (!$object->save(false))
+				return false;
+		}
 
 		return true;
 	}

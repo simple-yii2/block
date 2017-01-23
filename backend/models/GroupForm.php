@@ -39,16 +39,19 @@ class GroupForm extends Model
 	public $imageHeight;
 
 	/**
-	 * @var cms\block\common\models\Group
+	 * @var Group
 	 */
 	private $_object;
 
 	/**
 	 * @inheritdoc
-	 * @param cms\block\common\models\Group $object 
+	 * @param Group|null $object 
 	 */
-	public function __construct(\cms\block\common\models\Group $object, $config = [])
+	public function __construct(Group $object = null, $config = [])
 	{
+		if ($object === null)
+			$object = new Group;
+
 		$this->_object = $object;
 
 		//attributes
@@ -59,6 +62,15 @@ class GroupForm extends Model
 		$this->imageHeight = $object->imageHeight;
 
 		parent::__construct($config);
+	}
+
+	/**
+	 * Object getter
+	 * @return Group
+	 */
+	public function getObject()
+	{
+		return $this->_object;
 	}
 
 	/**
@@ -89,15 +101,6 @@ class GroupForm extends Model
 	}
 
 	/**
-	 * Block count getter
-	 * @return integer
-	 */
-	public function getBlockCount()
-	{
-		return $this->_object->blockCount;
-	}
-
-	/**
 	 * Saving object using model attributes
 	 * @return boolean
 	 */
@@ -114,8 +117,14 @@ class GroupForm extends Model
 		$object->imageWidth = (integer) $this->imageWidth;
 		$object->imageHeight = (integer) $this->imageHeight;
 
-		if (!$object->save(false))
-			return false;
+		//saving object
+		if ($object->getIsNewRecord()) {
+			if (!$object->makeRoot(false))
+				return false;
+		} else {
+			if (!$object->save(false))
+				return false;
+		}
 
 		return true;
 	}

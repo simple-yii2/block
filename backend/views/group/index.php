@@ -1,7 +1,10 @@
 <?php
 
-use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\web\JsExpression;
+
+use dkhlystov\widgets\NestedTreeGrid;
+use cms\block\common\models\Group;
 
 $title = Yii::t('block', 'Block groups');
 
@@ -18,43 +21,79 @@ $this->params['breadcrumbs'] = [
 	<?= Html::a(Yii::t('block', 'Create'), ['create'], ['class' => 'btn btn-primary']) ?>
 </div>
 
-<?= GridView::widget([
+<?= NestedTreeGrid::widget([
 	'dataProvider' => $dataProvider,
-	'filterModel' => $model,
-	'summary' => '',
+	'showRoots' => true,
+	'initialNode' => $initial,
+	'moveAction' => ['move'],
 	'tableOptions' => ['class' => 'table table-condensed'],
+	'pluginOptions' => [
+		'onMoveOver' => new JsExpression('function (item, helper, target, position) {
+			if (item.data("depth") == 0 || target.data("depth") == 0)
+				return false;
+
+			if (item.data("tree") != target.data("tree"))
+				return false;
+
+			return position != 1;
+		}'),
+	],
 	'rowOptions' => function ($model, $key, $index, $grid) {
-		return !$model->active ? ['class' => 'warning'] : [];
+		$options = ['data' => [
+			'depth' => $model->depth,
+			'tree' => $model->tree,
+		]];
+
+		if (!$model->active)
+			Html::addCssClass($options, 'warning');
+
+		return $options;
 	},
 	'columns' => [
 		[
 			'attribute' => 'title',
 			'format' => 'html',
+			'header' => Html::encode(Yii::t('block', 'Title')),
 			'value' => function($model, $key, $index, $column) {
-				$title = Html::encode($model->title);
-				$alias = Html::tag('span', Html::encode($model->alias), ['class' => 'label label-primary']);
-				$count = Html::tag('span', $model->blockCount, ['class' => 'badge']);
+				if ($model instanceof Group) {
+					$title = Html::encode($model->title);
+					$alias = Html::tag('span', Html::encode($model->alias), ['class' => 'label label-primary']);
+					$count = Html::tag('span', $model->children()->count(), ['class' => 'badge']);
 
-				return $title . '&nbsp;' . $alias . '&nbsp;' . $count;
+					return trim($title . ' ' . $alias . ' ' . $count);
+				} else {
+					$image = Html::img($model->thumb, ['height' => 20]);
+					$title = Html::encode($model->title);
+					$url = Html::tag('span', Html::encode($model->url), ['class' => 'text-info']);
+
+					return trim($image . ' ' . $title . ' ' . $url);
+				}
 			}
 		],
 		[
 			'class' => 'yii\grid\ActionColumn',
 			'options' => ['style' => 'width: 75px;'],
-			'template' => '{blocks} {update} {delete}',
+			'template' => '{update} {delete} {create}',
 			'buttons' => [
-				'blocks' => function($url, $model, $key) {
-					$title = Yii::t('block', 'Blocks');
+				'create' => function ($url, $model, $key) {
+					if (!$model->isRoot())
+						return '';
 
-					return Html::a('<span class="glyphicon glyphicon-th-large"></span>', [
-						'block/index', 'group_id' => $model->id,
-					], [
+					$title = Yii::t('block', 'Create block');
+
+					return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url, [
 						'title' => $title,
 						'aria-label' => $title,
 						'data-pjax' => 0,
 					]);
 				},
 			],
+			'urlCreator' => function ($action, $model, $key, $index) {
+				if ($action == 'create' || !$model->isRoot())
+					$action = 'block/' . $action;
+
+				return [$action, 'id' => $model->id];
+			},
 		],
 	],
 ]) ?>

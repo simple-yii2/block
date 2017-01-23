@@ -3,14 +3,14 @@
 namespace cms\block\backend\controllers;
 
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use cms\block\backend\models\BlockForm;
 use cms\block\common\models\Group;
 use cms\block\common\models\Block;
+use cms\block\backend\models\BlockForm;
 
 class BlockController extends Controller
 {
@@ -31,103 +31,83 @@ class BlockController extends Controller
 	}
 
 	/**
-	 * List
-	 * @param integer $group_id
-	 * @return void
-	 */
-	public function actionIndex($group_id)
-	{
-		$group = Group::findOne($group_id);
-		if ($group === null)
-			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
-
-		$dataProvider = new ActiveDataProvider([
-			'query' => $group->getBlocks(),
-		]);
-
-		return $this->render('index', [
-			'dataProvider' => $dataProvider,
-			'group' => $group,
-		]);
-	}
-
-	/**
 	 * Creating
-	 * @return void
+	 * @param integer $id
+	 * @return string
 	 */
-	public function actionCreate($group_id)
+	public function actionCreate($id)
 	{
-		$group = Group::findOne($group_id);
-		if ($group === null)
-			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
+		$parent = Group::findOne($id);
+		if ($parent === null)
+			throw new BadRequestHttpException(Yii::t('block', 'Item not found.'));
 
-		$object = new Block(['group_id' => $group->id]);
+		$model = new BlockForm;
 
-		$model = new BlockForm($object);
-
-		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
+		if ($model->load(Yii::$app->getRequest()->post()) && $model->save($parent)) {
 			Yii::$app->session->setFlash('success', Yii::t('block', 'Changes saved successfully.'));
-			return $this->redirect(['index', 'group_id' => $group->id]);
+			return $this->redirect([
+				'group/index',
+				'id' => $model->getObject()->id,
+			]);
 		}
 
 		return $this->render('create', [
 			'model' => $model,
-			'group' => $group,
+			'id' => $id,
+			'parent' => $parent,
 		]);
 	}
 
 	/**
 	 * Updating
-	 * @param integer $id
+	 * @param string $id
 	 * @return void
 	 */
 	public function actionUpdate($id)
 	{
 		$object = Block::findOne($id);
-		if ($object === null)
-			throw new BadRequestHttpException(Yii::t('block', 'Block not found.'));
-
-		$group = $object->group;
-		if ($group === null)
-			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
+		if ($object === null || $object->isRoot())
+			throw new BadRequestHttpException(Yii::t('block', 'Item not found.'));
 
 		$model = new BlockForm($object);
 
 		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('block', 'Changes saved successfully.'));
-			return $this->redirect(['index', 'group_id' => $group->id]);
+			return $this->redirect([
+				'group/index',
+				'id' => $model->getObject()->id,
+			]);
 		}
 
 		return $this->render('update', [
 			'model' => $model,
-			'group' => $group,
+			'id' => $object->id,
+			'parent' => $object->parents(1)->one(),
 		]);
 	}
 
 	/**
 	 * Deleting
-	 * @param integer $id
+	 * @param string $id
 	 * @return void
 	 */
 	public function actionDelete($id)
 	{
 		$object = Block::findOne($id);
-		if ($object === null)
-			throw new BadRequestHttpException(Yii::t('block', 'Block not found.'));
+		if ($object === null || $object->isRoot())
+			throw new BadRequestHttpException(Yii::t('block', 'Item not found.'));
 
-		$group = $object->group;
-		if ($group === null)
-			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
+		$sibling = $object->prev()->one();
+		if ($sibling === null)
+			$sibling = $object->next()->one();
 
-		if ($object->delete()) {
+		if ($object->deleteWithChildren()) {
 			Yii::$app->storage->removeObject($object);
-			
-			Yii::$app->session->setFlash('success', Yii::t('block', 'Block deleted successfully.'));
+
+			Yii::$app->session->setFlash('success', Yii::t('block', 'Item deleted successfully.'));
 		}
 
-		$group->updateBlockCount();
-
-		return $this->redirect(['index', 'group_id' => $group->id]);
+		return $this->redirect(['group/index', 'id' => $sibling ? $sibling->id : null]);
 	}
 
 }

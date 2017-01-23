@@ -7,11 +7,9 @@ return [
 	'Create group' => 'Добавить группу',
 	'Create block' => 'Добавить блок',
 
-	'Group not found.' => 'Группа не найдена.',
+	'Item not found.' => 'Элемент не найден.',
 	'Changes saved successfully.' => 'Изменения успешно сохранены.',
-	'Block not found.' => 'Блок не найден.',
-	'Block deleted successfully.' => 'Блок успешно удален.',
-	'Group deleted successfully.' => 'Группа успешно удалена.',
+	'Item deleted successfully.' => 'Элемент успешно удален.',
 
 	'Active' => 'Активный',
 	'Image' => 'Изображение',

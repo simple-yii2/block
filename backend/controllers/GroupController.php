@@ -3,12 +3,13 @@
 namespace cms\block\backend\controllers;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
 use cms\block\backend\models\GroupForm;
-use cms\block\backend\models\GroupSearch;
+use cms\block\common\models\BaseBlock;
 use cms\block\common\models\Group;
 
 class GroupController extends Controller
@@ -30,16 +31,21 @@ class GroupController extends Controller
 	}
 
 	/**
-	 * List
-	 * @return void
+	 * Tree
+	 * @param integer|null $id Initial item id
+	 * @return string
 	 */
-	public function actionIndex()
+	public function actionIndex($id = null)
 	{
-		$model = new GroupSearch;
+		$initial = BaseBlock::findOne($id);
+
+		$dataProvider = new ActiveDataProvider([
+			'query' => BaseBlock::find(),
+		]);
 
 		return $this->render('index', [
-			'dataProvider' => $model->search(Yii::$app->getRequest()->get()),
-			'model' => $model,
+			'dataProvider' => $dataProvider,
+			'initial' => $initial,
 		]);
 	}
 
@@ -49,7 +55,7 @@ class GroupController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new GroupForm(new Group);
+		$model = new GroupForm;
 
 		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('block', 'Changes saved successfully.'));
@@ -70,7 +76,7 @@ class GroupController extends Controller
 	{
 		$object = Group::findOne($id);
 		if ($object === null)
-			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
+			throw new BadRequestHttpException(Yii::t('block', 'Item not found.'));
 
 		$model = new GroupForm($object);
 
@@ -92,19 +98,55 @@ class GroupController extends Controller
 	public function actionDelete($id)
 	{
 		$object = Group::findOne($id);
-		if ($object === null)
-			throw new BadRequestHttpException(Yii::t('block', 'Group not found.'));
+		if ($object === null || !$object->isRoot())
+			throw new BadRequestHttpException(Yii::t('block', 'Item not found.'));
 
+		//blocks
 		foreach ($object->blocks as $block) {
-			$block->delete();
+			$block->deleteWithChildren();
 			Yii::$app->storage->removeObject($block);
 		}
 
-		if ($object->delete()) {
-			Yii::$app->session->setFlash('success', Yii::t('block', 'Group deleted successfully.'));
-		}
+		//object
+		if ($object->deleteWithChildren())
+			Yii::$app->session->setFlash('success', Yii::t('block', 'Item deleted successfully.'));
 
 		return $this->redirect(['index']);
+	}
+
+	/**
+	 * Move
+	 * @param integer $id 
+	 * @param integer $target 
+	 * @param integer $position 
+	 * @return string
+	 */
+	public function actionMove($id, $target, $position)
+	{
+		$object = BaseBlock::findOne($id);
+		if ($object === null)
+			throw new BadRequestHttpException(Yii::t('block', 'Item not found.'));
+		if ($object->isRoot())
+			return;
+
+		$t = BaseBlock::findOne($target);
+		if ($t === null)
+			throw new BadRequestHttpException(Yii::t('block', 'Item not found.'));
+		if ($t->isRoot())
+			return;
+
+		if ($object->tree != $t->tree)
+			return;
+
+		switch ($position) {
+			case 0:
+				$object->insertBefore($t);
+				break;
+			
+			case 2:
+				$object->insertAfter($t);
+				break;
+		}
 	}
 
 }

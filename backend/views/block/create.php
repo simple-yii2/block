@@ -8,7 +8,6 @@ $this->title = $title . ' | ' . Yii::$app->name;
 
 $this->params['breadcrumbs'] = [
 	['label' => Yii::t('block', 'Block groups'), 'url' => ['group/index']],
-	['label' => $group->title, 'url' => ['index']],
 	$title,
 ];
 
@@ -17,5 +16,6 @@ $this->params['breadcrumbs'] = [
 
 <?= $this->render('form', [
 	'model' => $model,
-	'group' => $group,
+	'id' => $id,
+	'parent' => $parent,
 ]) ?>

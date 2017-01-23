@@ -3,6 +3,8 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
+$count = $model->getObject()->children()->count();
+
 ?>
 <?php $form = ActiveForm::begin([
 	'layout' => 'horizontal',
@@ -16,13 +18,13 @@ use yii\helpers\Html;
 
 	<?= $form->field($model, 'alias') ?>
 
-	<?php if ($model->blockCount) {
+	<?php if ($count) {
 		echo $form->field($model, 'imageWidth')->staticControl();
 	} else {
 		echo $form->field($model, 'imageWidth');	
 	} ?>
 
-	<?php if ($model->blockCount) {
+	<?php if ($count) {
 		echo $form->field($model, 'imageHeight')->staticControl();
 	} else {
 		echo $form->field($model, 'imageHeight');	
