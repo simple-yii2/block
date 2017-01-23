@@ -62,7 +62,7 @@ $this->params['breadcrumbs'] = [
 
 					return trim($title . ' ' . $alias . ' ' . $count);
 				} else {
-					$image = Html::img($model->thumb, ['height' => 20]);
+					$image = empty($model->thumb) ? '' : Html::img($model->thumb, ['height' => 20]);
 					$title = Html::encode($model->title);
 					$url = Html::tag('span', Html::encode($model->url), ['class' => 'text-info']);
 
