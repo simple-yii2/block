@@ -29,7 +29,7 @@ $imageSize = '<br><span class="label label-default">' . $parent->imageWidth . '&
 
 	<?= $form->field($model, 'text')->textarea(['rows' => 5]) ?>
 
-	<?= $form->field($model, 'url')->textInput(['placeholder' => 'http://example.com']) ?>
+	<?= $form->field($model, 'url') ?>
 
 	<?= $form->field($model, 'linkLabel') ?>
 
