@@ -8,6 +8,7 @@ create table if not exists `Block`
 	`active` tinyint(1) default 1,
 	`alias` varchar(100) default null,
 	`title` varchar(100) default null,
+	`lead` varchar(200) default null,
 	`text` text,
 	`url` varchar(200) default null,
 	`linkLabel` varchar(100) default null,
