@@ -28,6 +28,11 @@ class Blocks extends ListView
 	public $itemOptions = ['class' => 'col-md-4'];
 
 	/**
+	 * @var array options for link tag
+	 */
+	public $linkOptions = ['class' => 'btn btn-default'];
+
+	/**
 	 * @inheritdoc
 	 */
 	public $options = ['class' => 'row'];
@@ -99,7 +104,7 @@ class Blocks extends ListView
 				$text = Html::tag('p', Html::encode($model->text));
 
 			$label = empty($model->linkLabel) ? Html::encode($model->title) . '&nbsp;&raquo;' : Html::encode($model->linkLabel);
-			$link = Html::a($label, $model->url, ['class' => 'btn btn-default']);
+			$link = Html::a($label, $model->url, $widget->linkOptions);
 			$link = Html::tag('p', $link);
 
 			return $image . $title . $lead . $text . $link;
