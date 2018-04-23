@@ -19,6 +19,11 @@ return [
 	'Url' => 'Ссылка',
 	'Alias' => 'Псевдоним',
 	'Link label' => 'Подпись для ссылки',
+	'Enable alias' => 'Псевдоним',
+	'Enable image' => 'Изображение',
+	'Enable lead' => 'Подзаголовок',
+	'Enable text' => 'Текст',
+	'Enable link' => 'Ссылка',
 	'Image width' => 'Ширина изображения',
 	'Image height' => 'Высота изображения',
 

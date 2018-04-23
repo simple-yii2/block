@@ -12,64 +12,74 @@ use dkhlystov\storage\components\StoredInterface;
 class Block extends BaseBlock implements StoredInterface
 {
 
-	/**
-	 * @inheritdoc
-	 */
-	public function init()
-	{
-		parent::init();
+    /**
+     * @inheritdoc
+     */
+    public function __construct($config = [])
+    {
+        parent::__construct(array_replace([
+            'active' => true,
+            'url' => '#',
+        ], $config));
+    }
 
-		if ($this->active === null)
-			$this->active = true;
+    /**
+     * Find by alias
+     * @param sring $alias Alias or id
+     * @return Block
+     */
+    public static function findByAlias($alias) {
+        $model = static::findOne(['alias' => $alias]);
+        if ($model === null)
+            $model = static::findOne(['id' => $alias]);
 
-		if ($this->url === null)
-			$this->url = '#';
-	}
+        return $model;
+    }
 
-	/**
-	 * Return files from attributes
-	 * @param array $attributes 
-	 * @return array
-	 */
-	private function getFilesFromAttributes($attributes)
-	{
-		$files = [];
+    /**
+     * Return files from attributes
+     * @param array $attributes 
+     * @return array
+     */
+    private function getFilesFromAttributes($attributes)
+    {
+        $files = [];
 
-		if (!empty($attributes['image']))
-			$files[] = $attributes['image'];
+        if (!empty($attributes['image']))
+            $files[] = $attributes['image'];
 
-		if (!empty($attributes['thumb']))
-			$files[] = $attributes['thumb'];
+        if (!empty($attributes['thumb']))
+            $files[] = $attributes['thumb'];
 
-		return $files;
-	}
+        return $files;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getOldFiles()
-	{
-		return $this->getFilesFromAttributes($this->getOldAttributes());
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getOldFiles()
+    {
+        return $this->getFilesFromAttributes($this->getOldAttributes());
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getFiles()
-	{
-		return $this->getFilesFromAttributes($this->getAttributes());
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getFiles()
+    {
+        return $this->getFilesFromAttributes($this->getAttributes());
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function setFiles($files)
-	{
-		if (array_key_exists($this->image, $files))
-			$this->image = $files[$this->image];
+    /**
+     * @inheritdoc
+     */
+    public function setFiles($files)
+    {
+        if (array_key_exists($this->image, $files))
+            $this->image = $files[$this->image];
 
-		if (array_key_exists($this->thumb, $files))
-			$this->thumb = $files[$this->thumb];
-	}
+        if (array_key_exists($this->thumb, $files))
+            $this->thumb = $files[$this->thumb];
+    }
 
 }
