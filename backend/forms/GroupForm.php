@@ -131,7 +131,7 @@ class GroupForm extends Model
             [['alias', 'title'], 'string', 'max' => 100],
             [['enableAlias', 'enableImage', 'enableLead', 'enableText', 'enableLink'], 'boolean'],
             [['imageWidth', 'imageHeight'], 'integer', 'min' => 32, 'max' => 1000],
-            [['alias', 'title', 'enableAlias', 'enableImage', 'enableLead', 'enableText', 'enableLink', 'imageWidth', 'imageHeight'], 'required'],
+            [['title', 'enableAlias', 'enableImage', 'enableLead', 'enableText', 'enableLink', 'imageWidth', 'imageHeight'], 'required'],
         ];
     }
 

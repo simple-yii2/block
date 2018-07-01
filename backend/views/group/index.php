@@ -6,7 +6,7 @@ use yii\web\JsExpression;
 use dkhlystov\widgets\NestedTreeGrid;
 use cms\block\common\models\Group;
 
-$title = Yii::t('block', 'Block groups');
+$title = Yii::t('block', 'Blocks');
 
 $this->title = $title . ' | ' . Yii::$app->name;
 
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'] = [
 <h1><?= Html::encode($title) ?></h1>
 
 <div class="btn-toolbar" role="toolbar">
-    <?= Html::a(Yii::t('block', 'Create'), ['create'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a(Yii::t('block', 'Create group'), ['create'], ['class' => 'btn btn-primary']) ?>
 </div>
 
 <?= NestedTreeGrid::widget([
@@ -26,7 +26,6 @@ $this->params['breadcrumbs'] = [
     'showRoots' => true,
     'initialNode' => $initial,
     'moveAction' => ['move'],
-    'tableOptions' => ['class' => 'table table-condensed'],
     'pluginOptions' => [
         'onMoveOver' => new JsExpression('function (item, helper, target, position) {
             if (item.data("depth") == 0 || target.data("depth") == 0)
